@@ -17,8 +17,9 @@ return function(size)
             dex[index] = value 
         end
         
-        f.__metatable = true
+        
     }
+    f.__metatable = true
     
     return frame
 end 

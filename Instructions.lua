@@ -1,6 +1,7 @@
 --Made seperate file for instructions
 
 local instructions = {}
+local bitwise = require("ay/Bitwise.lua")
 
 --* = asd repetetive ik, just want to make it easy on the eyes 
 instructions[0] = function(method) end --nop
@@ -23,6 +24,15 @@ instructions[15] = function(method) method.stack:Push(1) end --dconst_1*
 instructions[16] = function(method)
     method.stack:Push(method:get())
 end --bipush
-
-
+instructions[17] = function(method)
+    --local a, b = method:get(), method:get()
+    method.stack:Push(bitwise:OR(bitwise:SHL(method:get(), 8), method:get(), 16))
+end--sipush
+instructions[18] = function(method)
+    local constant = method.block.constant_pool[method:get()]
+    local tag = constant[1] 
+    
+    if (tag == 3 or tag == 4) then
+        method.stack:Push(constant)
+    elseif (tag == 
 return instructions
