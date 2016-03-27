@@ -26,7 +26,8 @@ function Stack(n)
 			rawset(getmetatable(self).__index, index, value)
 		end 
 		
-		return stack  --dont care for locking
+		s.__metatable = true
+		return stack
 end 
 
 

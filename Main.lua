@@ -4,17 +4,18 @@ function JVM(bytecode)
 	local bitwise = require("ay/Bitwise") -- For of
 	local java = require("ay/Java")
 	local stack = require("ay/Stack")
-	
+	local frame = require("ay/Frame")
 	
 	local function code_wrap(block)
+	    
+	    local rInstructions = {}
 
 		local m = {
 		    LoadedClasses = {},
-		    ProgramCounter = 1,
 			GetBlock = function()
 				return block 
 			end,
-			PrepareMethod = function(method_info)
+			PrepareMethod = function(self, method_info)
 			    local pmethod = {}
 			    local code_segment = java.Parser.GetAttribute(block.constant_pool, method_info[5], "Code")
 			    
@@ -22,21 +23,39 @@ function JVM(bytecode)
 			    pmethod.instructions = code_segment[6]
 			    pmethod.n_stack = code_segment[3]
 				pmethod.n_locals = code_segment[4]
+				pmethod.code = code_segment[6]
+				pmethod.pre_classes = self.LoadedClasses
+				pmethod.instructions = require("ay/Instructions")
+				pmethod.program_counter = 1
+				pmethod.block = block 
 			    
+			    pmethod.get = function(self)
+			        local byte = tonumber(string.byte(self.code[self.program_counter]))
+			        self.program_counter = self.program_counter + 1
+			        return byte
+			    end 
 			    return pmethod
+		    end,
+		    ExecuteMethod = function(method)
+		        while method.program_counter < #method.code do 
+		            local op = method:get()
+		            print(method.instructions[op], op)
+		        end 
 		    end,
 		    LoadClass = function(self, block)
 		        local classname = java.JParser.UTF8(block.constant_pool[block.constant_pool[block.this_class][2]])
 		        
 		        self.LoadedClasses[classname] = block
 		        
-		        local init_method = self.PrepareMethod(java.Parser.GetMethod(block.constant_pool, block.methods, "<init>"))
+		        local init_method = self:PrepareMethod(java.Parser.GetMethod(block.constant_pool, block.methods, "<init>"))
+	            local main = self:PrepareMethod(java.Parser.GetMethod(block.constant_pool, block.methods, "main"))
+	            print("localcs", main.n_locals)
 	        end,
 			RunDebug = function(self)
 			
 			    
+			    self:Run()
 			
-				self:LoadClass(block)
 				
 				---------------------------------------------------------------------------------------------
 				local this_class_name = java.JParser.UTF8(block.constant_pool[block.constant_pool[block.this_class][2]])
@@ -64,6 +83,10 @@ function JVM(bytecode)
 			    
 			end,
 			Run = function(self)
+			    self:LoadClass(block)
+			    local init_method = java.Parser.GetMethod(block.constant_pool, block.methods, "<init>")
+			    
+			    print(init_method, "found")
 		    end 
 		    
 		}

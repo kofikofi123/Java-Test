@@ -163,7 +163,7 @@ local Parser = {} do --not local for now
 	Parser.cp_info = function(self, c)
 			local cp_info = {}
 			local temp, buffer
-			
+			local index = 1 
 			while (c > 0) do 
 				buffer = {}
 				temp = Parser.byte()
@@ -181,7 +181,9 @@ local Parser = {} do --not local for now
 				elseif (temp == 5 or temp == 6) then 
 					buffer[2] = Parser.dword()
 					buffer[3] = Parser.dword()
-					Parser.byte() -- trash it
+					c = c - 1
+					index = index + 1
+					--Parser.byte()
 				elseif (temp == 12) then 
 					buffer[2] = Parser.word()
 					buffer[3] = Parser.word()
@@ -202,11 +204,15 @@ local Parser = {} do --not local for now
 				elseif (temp == 18) then
 					buffer[2] = Parser.word()
 					buffer[3] = Parser.word()
+				else 
+				    print("Unkown tag", buffer[1])
 				end
 				
-				cp_info[#cp_info + 1] = buffer 
+				cp_info[index] = buffer 
 				
-				c = c - 1 
+			    c = c - 1 
+			    index = index + 1
+			    
 			end 
 			
 			
@@ -235,7 +241,6 @@ local Parser = {} do --not local for now
 					Parser.word(),
 					Parser.word()
 				}
-			
 				field_info[5] = self:attribute_info(cp, field_info[4])
 				fields[#fields + 1] = field_info
 				c = c - 1
