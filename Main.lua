@@ -19,13 +19,15 @@ function JVM(bytecode)
 			    local pmethod = {}
 			    local code_segment = java.Parser.GetAttribute(block.constant_pool, method_info[5], "Code")
 			    
-			    pmethod.stack = stack(code_segment[3])
+			    
 			    pmethod.instructions = code_segment[6]
 			    pmethod.n_stack = code_segment[3]
 				pmethod.n_locals = code_segment[4]
 				pmethod.code = code_segment[6]
 				pmethod.pre_classes = self.LoadedClasses
 				pmethod.instructions = require("ay/Instructions")
+				pmethod.frame = frame(pmethod.n_locals - 1)
+				pmethod.stack = stack(pmethod.n_stack)
 				pmethod.program_counter = 1
 				pmethod.block = block 
 			    
