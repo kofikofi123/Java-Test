@@ -248,7 +248,7 @@ local Parser = {} do --not local for now
 			
 			return fields
 		end 
-		
+		--[[
 		Parser.StackMapTableParse = function(self, n)
 		    local attributes = {}
 		    local buffer
@@ -277,7 +277,7 @@ local Parser = {} do --not local for now
 			    end 
 			    
 		    end 
-		    
+		]]
 		Parser.vertification_info_parser = function(self, n)
 		    local tbl = {}
 		    
