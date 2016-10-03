@@ -9,6 +9,7 @@ function Stack(d, n)
 		Base = 0,
 		Index = 0,
 		CheckStack = function(self)
+			if (not d) then return true end
 			local base = self.Base 
 			local top = self.Top
 			local index = self.Index
@@ -22,7 +23,7 @@ function Stack(d, n)
 			return true
 		end,
 		Push = function(self, item)
-			if (self:CheckStack() and not d)
+			if (self:CheckStack()) then
 				return false, error("Something wrong happened")
 			end
 
@@ -32,7 +33,16 @@ function Stack(d, n)
 			self.Index = index + 1 
 		end,
 		Pop = function(self)
-
+			if (self:CheckStack()) then 
+				return false, error("Something wrong happened")
+			end 
+			
+			local index = self.Index 
+			local value = field[index]
+			
+			self.Index = index - 1 
+			
+			return true, value
 		end 
 	}
 
