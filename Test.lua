@@ -19,4 +19,11 @@ if (not content) then
 end
 
 local java = require("Main")
-print(table.foreach(java(content), print))
+local content = java(content)
+
+local methods = content.Debugger:GetMethods()
+
+print("Methods", "|", "Grammar")
+table.foreach(methods, function(a, b)
+   print(b[1], "|", b[2])
+end)
