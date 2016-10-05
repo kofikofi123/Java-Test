@@ -27,3 +27,8 @@ print("Methods", "|", "Grammar")
 table.foreach(methods, function(a, b)
    print(b[1], "|", b[2])
 end)
+
+local init  = content.Debugger:GetMethod("<init>")
+local code_attribute = content.Debugger:GetAttribute(init[5], "Code")
+
+table.foreach(code_attribute, print)

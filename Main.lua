@@ -32,6 +32,19 @@ function JVM(bytecode)
 					end)
 					
 					return results
+				end,
+				GetMethod = function(self, method_name)
+					local block = self.Block
+					local cpool = block.constant_pool
+					local methods  = block.methods 
+
+					return java.Parser.GetMethod(cpool, methods, method_name)
+				end,
+				GetAttribute = function(self, attribute_info, attribute_name)
+					local block = self.Block
+					local cpool = block.constant_pool
+
+					return java.Parser.GetAttribute(cpool, attribute_info, attribute_name)
 				end
 			}
 		}
