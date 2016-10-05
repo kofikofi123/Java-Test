@@ -31,4 +31,4 @@ end)
 local init  = content.Debugger:GetMethod("<init>")
 local code_attribute = content.Debugger:GetAttribute(init[5], "Code")
 
-table.foreach(code_attribute, print)
+print(#code_attribute[6], code_attribute[4])

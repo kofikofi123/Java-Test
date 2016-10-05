@@ -1,4 +1,4 @@
-needed_lua := lua-5.1 
+needed_lua := lua
 
 ponpile:
 	@javac -g Test.java
