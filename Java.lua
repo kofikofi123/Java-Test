@@ -223,7 +223,7 @@ local Parser = {} do --not local for now
 		Parser.GetArray = function(n, size_t)
 			local array = {}
 			
-				while (n > 0) do 
+			while (n > 0) do 
 				array[#array + 1] = get_erase(1, size_t)
 				n = n - 1
 			end 

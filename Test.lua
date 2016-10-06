@@ -31,4 +31,6 @@ end)
 local init  = content.Debugger:GetMethod("<init>")
 local code_attribute = content.Debugger:GetAttribute(init[5], "Code")
 
-print(#code_attribute[6], code_attribute[4])
+table.foreach(code_attribute[6], function(a, b) 
+	print(tonumber(b:byte(1,1)))
+end)
